@@ -1,4 +1,3 @@
-import { compare } from "bcrypt";
 import User from "../modal/UserModal.js";
 import { asyncHandler } from "../utils/asynchandler.js";
 import generatorToken from "../utils/generatorToken.js";
@@ -34,7 +33,7 @@ export const loginUser = async(req,res)=>{
 
    const user=await User.findOne({email})
 
-   if(user && (await User.comparePassword(password))){
+   if(user && (await user.comparePassword(password))){
       const token =generatorToken(res,user._id)
 
       res.json({
