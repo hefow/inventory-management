@@ -1,10 +1,10 @@
 import React from 'react'
-import Header from './Header'
+import NavBar from './NavBar'
 function Hero() {
   return (
     <section className="bg-purple-600 ">
       <div>
-      <Header/>
+      <NavBar/>
       <div className="text-center mt-10 p-5">
          <h1 className="text-white font-bold text-3xl">Effortless Inventory Tracking for Businesses</h1>
          <p className="text-white font-light mt-5">Track, manage, and optimize your inventory <br/> in real-time with ease.</p>
