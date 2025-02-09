@@ -1,5 +1,7 @@
 📦 Inventory Management System
+
 🚀 Overview
+
 The Inventory Management System is a web-based application built with React, Tailwind CSS, and Recharts that allows users to manage products, orders, and user roles efficiently. It features user authentication, product tracking, order management, and a shopping cart system.
 
 🎯 Key Features
