@@ -49,3 +49,13 @@ export const loginUser = async(req,res)=>{
       throw new Error("invalid email or password")
    }
 }
+
+//get User 
+export const getAllUsers=async(req,res)=>{
+   try {
+      const users =await User.find();
+      res.status(200).json(users)
+   } catch (error) {
+      console.log(error.message)
+   }
+}

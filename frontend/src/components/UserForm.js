@@ -3,21 +3,27 @@ import { useForm } from 'react-hook-form';
 import axios from 'axios'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Link } from 'react-router-dom';
 function UserForm() {
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
   const onSubmit = async(data) => {
-    console.log("Form Data:", data);
-    const response = await axios.post("http://localhost:8080/api/users/register",data)
-    console.log(response)
-    toast.success("User registered successfully.");
-    reset(); // Reset the form after submission
+    try {
+      console.log("Form Data:", data);
+      const response = await axios.post("http://localhost:8080/api/users/register",data)
+      console.log(response)
+      toast.success("User registered successfully.");
+      reset(); // Reset the form after submission
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Registration failed. Please try again.");
+    }
   };
 
   return (
-    <div className='flex justify-center items-center h-screen'>
-      <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-6 shadow-md rounded-md">
-        <h2 className="text-xl font-bold mb-4">Register Form</h2>
+    <div className='w-full '>
+      <h2 className="text-xl font-bold mb-4">Register User</h2>
+      <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-2 bg-white p-6 shadow-md rounded-md">
 
         {/* Name Field */}
         <div className="mb-2">
@@ -83,12 +89,12 @@ function UserForm() {
         </div>
 
         {/* Password Field */}
-        <div className="mb-2">
+        <div className="">
           <label htmlFor="password">Password</label>
           <input 
             type="password" 
             id="password" 
-            className='border-2 ml-2 outline-none px-2 py-2 mt-2' 
+            className='border-2  outline-none px-2 py-2 ' 
             {...register('password', { required: true, minLength: 6 })}
           />
           {errors.password && <p className='text-red-600'>Password must be at least 6 characters long</p>}
@@ -97,9 +103,9 @@ function UserForm() {
         {/* Submit Button */}
         <button 
           type="submit"
-          className='bg-green-500 px-4 py-2 w-full mt-2 text-white font-semibold rounded-md hover:bg-green-600'
+          className='bg-purple-500 px-4 py-2 w-full mt-2 text-white font-semibold rounded-md hover:bg-purple-600 col-span-2'
         >
-          Submit
+          <Link to="/dashboard/users" >Register</Link>
         </button>
       </form>
     </div>
