@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import helmet from 'helmet'
 import cors from 'cors'
 import { nodeEnv, PORT } from './config/confiig.js';
+import productRoutes from './routes/productRoutes.js'
 const app=express()
 
 db();
@@ -17,6 +18,7 @@ if(nodeEnv !== "production"){
    app.use(morgan())
 }
 app.use("/api/users",userRoute)
+app.use("/api/products",productRoutes)
 
 app.get("/",(req,res)=>{
    res.send("welcome to our server")
