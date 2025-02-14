@@ -18,7 +18,8 @@ export const addProduct=async(req,res)=>{
             modelNo:product.modelNo,
             location:product.location,
             supplier: product.supplier,
-            stock:product.stock
+            stock:product.stock,
+            user: req.user._id
          })
       }
 
