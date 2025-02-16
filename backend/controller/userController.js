@@ -35,6 +35,12 @@ export const loginUser = async(req,res)=>{
 
    if(user && (await user.comparePassword(password))){
       const token =generatorToken(res,user._id)
+      res.cookie("token", token, {
+         httpOnly: true, // Prevents JavaScript access
+         secure: process.env.NODE_ENV === "production", // Only in HTTPS
+         sameSite: "strict",
+         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      });
 
       res.json({
          name: user.name,

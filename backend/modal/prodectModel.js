@@ -2,9 +2,14 @@ import mongoose from 'mongoose'
 
 
 const productSchema= mongoose.Schema({
+   user:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true
+   },
    name:{
       type: String,
-      required: [true, "add name"],
+      required: [true, "Product name is required"],
    },
    category:{
       type: String,
@@ -29,7 +34,7 @@ const productSchema= mongoose.Schema({
       default:0
    }
 
-},{timestamp:true})
+},{timestamps:true})
 
 const Product = mongoose.model("Product",productSchema)
 

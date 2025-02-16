@@ -6,6 +6,7 @@ import helmet from 'helmet'
 import cors from 'cors'
 import { nodeEnv, PORT } from './config/confiig.js';
 import productRoutes from './routes/productRoutes.js'
+import cookieParser from "cookie-parser";
 const app=express()
 
 db();
@@ -13,6 +14,7 @@ app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 app.use(helmet())
 app.use(cors())
+app.use(cookieParser())
 
 if(nodeEnv !== "production"){
    app.use(morgan())
