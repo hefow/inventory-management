@@ -8,6 +8,8 @@ import {Routes} from 'react-router-dom'
 import Home from './pages/Home'
 import { ToastContainer } from 'react-toastify';
 import Login from './components/Login';
+import ProductForm from './components/ProductForm';
+import ProductList from './components/ProductList';
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
         <Route index element={<Overview />} /> {/* Default route inside Dashboard */}
         <Route path="users" element={<UserList />} />
         <Route path="users/add" element={<UserForm />} />
+        <Route path='products' element={<ProductList/>}/>
+        <Route path='products/add' element={<ProductForm/>}/>
       </Route>
       <Route path='/' element={<Home/>}/>
       <Route path='/login' element={<Login/>}/>
