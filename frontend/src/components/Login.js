@@ -4,24 +4,44 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../hooks/useUser.js";
 
 function Login() {
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
   const navigate = useNavigate(); 
 
-  const onSubmit = async (data) => {
+  // const onSubmit = async (data) => {
+  //   try {
+  //     console.log("Form Data:", data);
+  //     const response = await axios.post("http://localhost:8080/api/users/login", data);
+  //     console.log(response);
+  //     toast.success("Login successful.");
+  //     reset();
+  //     setTimeout(() => navigate("/dashboard"), 1500); // Redirect after 1.5s
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //     toast.error("Login failed. Check your credentials.");
+  //   }
+  // };
+  const { login } = useUser();  // Get login function from context
+
+const onSubmit = async (data) => {
     try {
       console.log("Form Data:", data);
       const response = await axios.post("http://localhost:8080/api/users/login", data);
-      console.log(response);
+      
+      const { user, token, expiresIn } = response.data; // Expecting these from backend
+
+      login(user, token, expiresIn); // Store user session in context
+
       toast.success("Login successful.");
       reset();
-      setTimeout(() => navigate("/dashboard"), 1500); // Redirect after 1.5s
+      setTimeout(() => navigate("/dashboard"), 1500);
     } catch (error) {
       console.error("Error:", error);
       toast.error("Login failed. Check your credentials.");
     }
-  };
+};
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
@@ -64,9 +84,9 @@ function Login() {
         </form>
         
         {/* Register Link */}
-        <p className="text-center text-sm text-gray-500 mt-4">
-          Don't have an account? <a href="/register" className="text-purple-500 font-semibold hover:underline">Sign Up</a>
-        </p>
+        {/* <p className="text-center text-sm text-gray-500 mt-4">
+          Don't have an account? <a href="/dashboard/users/add" className="text-purple-500 font-semibold hover:underline">Sign Up</a>
+        </p> */}
       </div>
     </div>
   );

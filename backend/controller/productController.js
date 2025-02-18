@@ -11,7 +11,7 @@ export const addProduct=async(req,res)=>{
 
       const product=await Product.create({
          ...req.body,
-         user: req.user
+         user: req.user._id
       })
       if(product){
          res.status(201).json(product)

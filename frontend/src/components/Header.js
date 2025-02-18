@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import userIcon from '../images/user.png';
+import { useUser } from '../hooks/useUser.js';
 
 function Header() {
   const [showMenu, setShowMenu] = useState(false);
+
+  const {logout } = useUser();
 
   return (
     <header className="w-full bg-white shadow-md p-3">
@@ -81,7 +84,7 @@ function Header() {
                   Settings
                 </Link>
                 <hr />
-                <button className="block w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100">
+                <button className="block w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100" onClick={logout}>
                   Logout
                 </button>
               </div>

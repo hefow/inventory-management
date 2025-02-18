@@ -14,12 +14,6 @@ import ProductList from './components/ProductList';
 function App() {
   return (
     <Routes>
-      
-      {/* <Route path='/dashboard/*' element={<Dashboard/>}>
-        <Route path='' element={<Overview/>}/>
-        <Route path='users' element={<UserList/>}/>
-        <Route path='users/add' element={<UserForm/>}/>
-      </Route> */}
       <Route path="dashboard" element={<Dashboard />}>
         <Route index element={<Overview />} /> {/* Default route inside Dashboard */}
         <Route path="users" element={<UserList />} />

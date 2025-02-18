@@ -7,18 +7,40 @@ import { toast } from 'react-toastify';
 function ProductForm() {
    const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
-  const onSubmit = async(data) => {
+  // const onSubmit = async(data) => {
+  //   try {
+  //     console.log("Form Data:", data);
+  //     const response = await axios.post("http://localhost:8080/api/products/add",data)
+  //     console.log(response)
+  //     toast.success(" New Product registered.");
+  //     reset(); // Reset the form after submission
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //     toast.error("Registration failed. Please try again.");
+  //   }
+  // };
+  const onSubmit = async (data) => {
     try {
-      console.log("Form Data:", data);
-      const response = await axios.post("http://localhost:8080/api/products/add",data)
-      console.log(response)
-      toast.success(" New Product registered.");
-      reset(); // Reset the form after submission
+        const token = localStorage.getItem("token");
+
+        const response = await axios.post(
+            "http://localhost:8080/api/products/add",
+            data,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+
+        console.log(response);
+        toast.success("New Product registered.");
     } catch (error) {
-      console.error("Error:", error);
-      toast.error("Registration failed. Please try again.");
+        console.error("Error:", error);
+        toast.error("Registration failed. Please try again.");
     }
-  };
+};
+
   return (
    <div className='w-full '>
    <h2 className="text-xl font-bold mb-4">Add new Product</h2>
