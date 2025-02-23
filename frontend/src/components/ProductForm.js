@@ -7,38 +7,47 @@ import { toast } from 'react-toastify';
 function ProductForm() {
    const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
-  // const onSubmit = async(data) => {
-  //   try {
-  //     console.log("Form Data:", data);
-  //     const response = await axios.post("http://localhost:8080/api/products/add",data)
-  //     console.log(response)
-  //     toast.success(" New Product registered.");
-  //     reset(); // Reset the form after submission
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //     toast.error("Registration failed. Please try again.");
-  //   }
-  // };
-  const onSubmit = async (data) => {
-    try {
-        const token = localStorage.getItem("token");
+//   const onSubmit = async (data) => {
+//     try {
+//         const response = await axios.post(
+//             "http://localhost:8080/api/products/add",
+//             data,
+//             {
+//               withCredentials: true,
+//               headers: {
+//                   "Content-Type": "application/json",
+//               },
+//           }
+//         );
 
-        const response = await axios.post(
-            "http://localhost:8080/api/products/add",
-            data,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
+//         console.log(response);
+//         toast.success("New Product registered.");
+//     } catch (error) {
+//         console.error("Error:", error);
+//         toast.error("Registration failed. Please try again.");
+//     }
+// };
 
-        console.log(response);
-        toast.success("New Product registered.");
-    } catch (error) {
-        console.error("Error:", error);
-        toast.error("Registration failed. Please try again.");
-    }
+const onSubmit = async (data) => {
+  try {
+      const response = await axios.post(
+          "http://localhost:8080/api/products/add",
+          data,
+          {
+              withCredentials: true,  // ✅ Ensure cookies are sent
+              headers: {
+                  "Content-Type": "application/json",
+              },
+          }
+      );
+
+      console.log(response);
+      toast.success("New Product registered.");
+      reset();
+  } catch (error) {
+      console.error("Error:", error);
+      toast.error("Registration failed. Please try again.");
+  }
 };
 
   return (

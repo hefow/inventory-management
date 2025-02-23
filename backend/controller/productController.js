@@ -2,8 +2,14 @@ import Product from '../modal/prodectModel.js'
 
 export const addProduct=async(req,res)=>{
    try {
-      console.log("User:", req.user);
+      console.log("User:", req.user._id);
+      const currentUser=req.user;
       const {name}=req.body
+      const regProduct=await Product.findOne({name})
+
+      if(regProduct){
+         return res.status(403).json({message:"This product already registered"})
+      }
 
       if(!name){
          res.status(403).json({message: "product is required."})
@@ -11,7 +17,7 @@ export const addProduct=async(req,res)=>{
 
       const product=await Product.create({
          ...req.body,
-         user: req.user._id
+         user: currentUser
       })
       if(product){
          res.status(201).json(product)
@@ -37,3 +43,4 @@ export const getAllProducts=async(req,res)=>{
       res.status(500).json({message: error.message})
    }
 }
+

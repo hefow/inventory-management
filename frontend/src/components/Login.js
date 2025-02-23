@@ -1,47 +1,53 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../hooks/useUser.js";
+import { useUser } from "../hooks/useUser";
 
 function Login() {
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
   const navigate = useNavigate(); 
 
-  // const onSubmit = async (data) => {
-  //   try {
-  //     console.log("Form Data:", data);
-  //     const response = await axios.post("http://localhost:8080/api/users/login", data);
-  //     console.log(response);
-  //     toast.success("Login successful.");
-  //     reset();
-  //     setTimeout(() => navigate("/dashboard"), 1500); // Redirect after 1.5s
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //     toast.error("Login failed. Check your credentials.");
-  //   }
-  // };
-  const { login } = useUser();  // Get login function from context
+  const {login,user}=useUser()
+  console.log('stored user:',user)
+  useEffect(()=>{
+    if(user) navigate('/dashboard')
+  },[user])
 
-const onSubmit = async (data) => {
+  const onSubmit = async (data) => {
     try {
-      console.log("Form Data:", data);
       const response = await axios.post("http://localhost:8080/api/users/login", data);
-      
-      const { user, token, expiresIn } = response.data; // Expecting these from backend
-
-      login(user, token, expiresIn); // Store user session in context
-
+      console.log(response);
       toast.success("Login successful.");
       reset();
-      setTimeout(() => navigate("/dashboard"), 1500);
+      console.log(response.data.expiresIn)
+      login(response.data,response.data.expiresIn)
+      setTimeout(() => navigate("/dashboard"), 1500); // Redirect after 1.5s
     } catch (error) {
       console.error("Error:", error);
       toast.error("Login failed. Check your credentials.");
     }
-};
+  };
+
+// const onSubmit = async (data) => {
+//     try {
+//       console.log("Form Data:", data);
+//       const response = await axios.post("http://localhost:8080/api/users/login", data);
+//       console.log(response.data)
+//       const { user, token, expiresIn } = response.data; // Expecting these from backend
+
+//       console.log(login(user, token, expiresIn)); // Store user session in context
+
+//       toast.success("Login successful.");
+//       reset();
+//       setTimeout(() => navigate("/dashboard"), 1500);
+//     } catch (error) {
+//       console.error("Error:", error);
+//       toast.error("Login failed. Check your credentials.");
+//     }
+// };
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">

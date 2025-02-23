@@ -1,6 +1,7 @@
+import { jwt_secret } from "../config/confiig.js";
+import jwt from 'jsonwebtoken'
 import User from "../modal/UserModal.js";
 import { asyncHandler } from "../utils/asynchandler.js";
-import generatorToken from "../utils/generatorToken.js";
 
 export const registerUser=asyncHandler(async(req,res)=>{
    const {name,email,password,dept,isAdmin,procurement}=req.body
@@ -28,32 +29,51 @@ export const registerUser=asyncHandler(async(req,res)=>{
    }
 })
 //login User
-export const loginUser = async(req,res)=>{
-   const {email,password}=req.body;
+// export const loginUser = async(req,res)=>{
+//    const {email,password}=req.body;
+
+//    const user=await User.findOne({email})
+
+//    if(user && (await user.comparePassword(password))){
+//       const expiresIn= 30 *24*60*60 //30 days
+//       const token =generatorToken(res,user._id,expiresIn)
+//       res.cookie("token", token, {
+//          httpOnly: true, // Prevents JavaScript access
+//          secure: process.env.NODE_ENV === "production", // Only in HTTPS
+//          sameSite: "strict",
+//          maxAge: expiresIn* 1000, // 7 days
+//       });
+
+//       res.json({...user.toJSON(),token,expiresIn})
+//    }else{
+//       res.status(401)
+//       throw new Error("invalid email or password")
+//    }
+// }
+
+export const loginUser =async (req,res)=>{
+   const {email,password}=req.body
 
    const user=await User.findOne({email})
+   if (!user) {
+    return res.status(401).json({ message: "Invalid email" });
+  }
+   const isMatch=await user.comparePassword(password)
+   if(!isMatch){
+    return res.status(401).json({
+      message:"invalid password"
+    })
+  }
+  // token generation
+  const expiresIn= 30 *24*60*60 //30 days
 
-   if(user && (await user.comparePassword(password))){
-      const token =generatorToken(res,user._id)
-      res.cookie("token", token, {
-         httpOnly: true, // Prevents JavaScript access
-         secure: process.env.NODE_ENV === "production", // Only in HTTPS
-         sameSite: "strict",
-         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      });
+  const token = jwt.sign({_id:user._id},jwt_secret,{ expiresIn})
 
-      res.json({
-         name: user.name,
-         email:user.email,
-         isAdmin:user.isAdmin,
-         procurement:user.procurement,
-         dept:user.dept,
-         token: token,
-      })
-   }else{
-      res.status(401)
-      throw new Error("invalid email or password")
-   }
+  res.cookie('token',token,{httpOnly:true,secure:false,maxAge:expiresIn* 1000})
+
+  user.password=undefined
+
+   res.status(200).send({...user.toJSON(),expiresIn,token})
 }
 
 //get User 

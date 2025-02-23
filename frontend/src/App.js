@@ -10,6 +10,7 @@ import { ToastContainer } from 'react-toastify';
 import Login from './components/Login';
 import ProductForm from './components/ProductForm';
 import ProductList from './components/ProductList';
+import Profile from './components/Profile';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="users/add" element={<UserForm />} />
         <Route path='products' element={<ProductList/>}/>
         <Route path='products/add' element={<ProductForm/>}/>
+        <Route path='profile' element={<Profile/>}/>
       </Route>
       <Route path='/' element={<Home/>}/>
       <Route path='/login' element={<Login/>}/>
