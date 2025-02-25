@@ -1,54 +1,36 @@
 import axios from 'axios';
 import React from 'react'
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 function ProductForm() {
    const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
-//   const onSubmit = async (data) => {
-//     try {
-//         const response = await axios.post(
-//             "http://localhost:8080/api/products/add",
-//             data,
-//             {
-//               withCredentials: true,
-//               headers: {
-//                   "Content-Type": "application/json",
-//               },
-//           }
-//         );
+   const navigate =useNavigate()
 
-//         console.log(response);
-//         toast.success("New Product registered.");
-//     } catch (error) {
-//         console.error("Error:", error);
-//         toast.error("Registration failed. Please try again.");
-//     }
-// };
+  const onSubmit = async (data) => {
+    try {
+        const response = await axios.post(
+            "http://localhost:8080/api/products/add",
+            data,
+            {
+                withCredentials: true,
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            }
+        );
 
-const onSubmit = async (data) => {
-  try {
-      const response = await axios.post(
-          "http://localhost:8080/api/products/add",
-          data,
-          {
-              withCredentials: true,  // ✅ Ensure cookies are sent
-              headers: {
-                  "Content-Type": "application/json",
-              },
-          }
-      );
-
-      console.log(response);
-      toast.success("New Product registered.");
-      reset();
-  } catch (error) {
-      console.error("Error:", error);
-      toast.error("Registration failed. Please try again.");
-  }
-};
+        console.log(response);
+        toast.success("New Product registered.");
+        reset();
+        navigate("/dashboard/products")
+    } catch (error) {
+        console.error("Error:", error);
+        toast.error("Registration failed. Please try again.");
+    }
+  };
 
   return (
    <div className='w-full '>
@@ -68,10 +50,10 @@ const onSubmit = async (data) => {
      </div>
 
      <div className="flex flex-col mb-2">
-          <label htmlFor="dept">category</label>
+          <label htmlFor="category">category</label>
           <select 
             className='border-2 outline-none px-2 py-2 mt-2 rounded-md' 
-            id="dept" 
+            id="category" 
             {...register('category', { required: true })}
           >
             <option value="">Select a category</option>
@@ -143,7 +125,7 @@ const onSubmit = async (data) => {
        type="submit"
        className='bg-purple-500 px-4 py-2 w-full mt-2 text-white font-semibold rounded-md hover:bg-purple-600 col-span-2'
      >
-       <Link to="/dashboard/users" >Register</Link>
+       Register
      </button>
    </form>
  </div>

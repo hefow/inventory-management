@@ -18,7 +18,7 @@ function Login() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post("http://localhost:8080/api/users/login", data);
+      const response = await axios.post("http://localhost:8080/api/users/login", data,{withCredentials: true});
       console.log(response);
       toast.success("Login successful.");
       reset();
