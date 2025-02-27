@@ -44,3 +44,40 @@ export const getAllProducts=async(req,res)=>{
    }
 }
 
+export const updateProduct =async(req,res)=>{
+   try {
+      const {id}=req.params;
+
+      const {name,category,manufacturer,modelNo,location,supplier,stock}=req.body;
+
+      const productUpdated=await Product.findByIdAndUpdate(id,{name,category,manufacturer,modelNo,location,supplier,stock},{new:true})
+
+      if(!productUpdated){
+         return res.status(404).json({message:"producted not found"})
+      }
+
+      res.status(200).json({message:"product updated",productUpdated})
+   } catch (error) {
+      res.status(500).json({message:"server error",error:error.message})
+   }
+} 
+
+//delete prodyct
+
+export const deleteProduct=async(req,res)=>{
+   try {
+      const {id}=req.params;
+
+      const product=await Product.findByIdAndDelete(id)
+
+      if(!product){
+         return res.status(404).json({message:"product not found"})
+      }
+
+      res.status(200).json({message:"product deleted"})
+      
+   } catch (error) {
+      res.status(500).json({message: "server error",error:error.message})
+   }
+}
+

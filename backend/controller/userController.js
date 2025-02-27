@@ -28,28 +28,6 @@ export const registerUser=asyncHandler(async(req,res)=>{
       console.log("invalid data")
    }
 })
-//login User
-// export const loginUser = async(req,res)=>{
-//    const {email,password}=req.body;
-
-//    const user=await User.findOne({email})
-
-//    if(user && (await user.comparePassword(password))){
-//       const expiresIn= 30 *24*60*60 //30 days
-//       const token =generatorToken(res,user._id,expiresIn)
-//       res.cookie("token", token, {
-//          httpOnly: true, // Prevents JavaScript access
-//          secure: process.env.NODE_ENV === "production", // Only in HTTPS
-//          sameSite: "strict",
-//          maxAge: expiresIn* 1000, // 7 days
-//       });
-
-//       res.json({...user.toJSON(),token,expiresIn})
-//    }else{
-//       res.status(401)
-//       throw new Error("invalid email or password")
-//    }
-// }
 
 export const loginUser =async (req,res)=>{
    const {email,password}=req.body
@@ -89,37 +67,29 @@ export const getAllUsers=async(req,res)=>{
 // update user
 export const updateUser =async(req,res)=>{
    try {
-      const userId=req.param;
-      const {name,isAdmin,dept,email,password,procurement}=req.body;
+      const {userId}=req.params;
+      console.log(userId)
+      const {name,dept,}=req.body;
 
-      const user=await User.findOne({userId})
-      if(!user){
+      const userUpdated=await User.findByIdAndUpdate(userId,{name,dept},{new:true})
+      if(!userUpdated){
          return res.status(404).json({message:"user not found"})
       }
 
-      user.name=name || user.name,
-      user.dept=dept || user.dept,
-      user.isAdmin= isAdmin || user.isAdmin,
-      user.email=email || user.email,
-      user.password || user.password,
-      user.procurement=procurement || user.procurement
-
-
-      const updatedUser=await user.save();
-
-      res.status(200).json({updatedUser})
+      res.status(200).json({message:"user updated",userUpdated})
    } catch (error) {
       res.status(500).json({message:"server error",error:error.message})
    }
 } 
 
+
 //delete user
 
 export const deleteUser=async(req,res)=>{
    try {
-      const {id}=req.param;
+      const {id}=req.params;
       console.log(id)
-      const user=await User.findByIdAndDelete({id})
+      const user=await User.findByIdAndDelete(id)
       if(!user){
          return res.status(404).json({message:"user not found"})
       }
